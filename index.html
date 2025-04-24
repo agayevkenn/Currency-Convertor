@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <title>Currency Convertor</title>
+  </head>
+  <body>
+    <header>
+      <img class="logo" src="./img/logo.svg" alt="logo" />
+      <nav>
+        <div>Bank</div>
+        <div>Bussines</div>
+        <div>Investment</div>
+        <div>Insurance</div>
+        <div>Mobile</div>
+        <div>Trips</div>
+        <div>Entertainment</div>
+        <button class="login">Login</button>
+      </nav>
+      <div class="burger">
+        <img class="burger-icon" src="./img/burger.svg" alt="burger icon" />
+      </div>
+    </header>
+
+    <main>
+      <div class="container">
+        <h1>Online currency converter</h1>
+        <div class="converter">
+          <div class="left-convertor">
+            <h5>I have</h5>
+            <div class="currency-button">
+              <button class="active">RUB</button>
+              <button>USD</button>
+              <button>EUR</button>
+              <button>GBP</button>
+            </div>
+            <div class="currency-input">
+              <input type="text" inputmode="decimal" placeholder="0" />
+              <span>1 RUB = </span>
+            </div>
+          </div>
+
+          <div class="right-convertor">
+            <h5>I want to buy</h5>
+            <div class="currency-button">
+              <button>RUB</button>
+              <button class="active">USD</button>
+              <button>EUR</button>
+              <button>GBP</button>
+            </div>
+            <div class="currency-input">
+              <input type="text" inputmode="decimal" placeholder="0" />
+              <span>1 USD = </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <div class="connection">
+      Connection lost. Conversions are not available.
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>

@@ -1,0 +1,272 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Roboto", sans-serif;
+}
+
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #f5f5f6;
+  padding: 15px 30px;
+  position: relative;
+  flex-wrap: wrap;
+}
+
+.logo {
+  margin-left: 90px;
+  max-width: 120px;
+}
+
+nav {
+  display: flex;
+  gap: 50px;
+  align-items: center;
+  color: #959ba4;
+  font-weight: 500;
+  margin-left: 20px;
+  flex-wrap: wrap;
+}
+
+nav div:first-child {
+  color: black;
+  font-weight: 700;
+}
+
+.login {
+  background: white;
+  border: none;
+  border-radius: 5px;
+  padding: 9px 18px;
+  font-weight: 500;
+  cursor: pointer;
+  margin-left: 70px;
+}
+
+.burger-icon {
+  display: none;
+  cursor: pointer;
+}
+
+main {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 40px 20px;
+}
+
+.container {
+  width: 100%;
+  max-width: 1100px;
+  text-align: center;
+}
+
+h1 {
+  font-size: 36px;
+  margin-bottom: 40px;
+}
+
+.converter {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 120px;
+  flex-wrap: wrap;
+}
+
+.left-convertor,
+.right-convertor {
+  width: 280px;
+}
+
+h5 {
+  text-align: left;
+  color: #9f9f9f;
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+
+.currency-button {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  width: 100%;
+  border-radius: 4px;
+  overflow: hidden;
+  border: 1px solid #e5e5e5;
+}
+
+.currency-button button {
+  flex: 1;
+  padding: 8px 0;
+  border: none;
+  background: white;
+  cursor: pointer;
+  color: #c6c6c6;
+  font-size: 14px;
+}
+
+.currency-button button + button {
+  border-left: 1px solid #e5e5e5;
+}
+
+.currency-button button.active {
+  background: #833ae0;
+  color: white;
+}
+
+.currency-input {
+  border: 1px solid #e5e5e5;
+  border-radius: 4px;
+  padding: 12px;
+  font-size: 36px;
+  position: relative;
+  width: 100%;
+  height: 100px;
+}
+
+.currency-input input {
+  width: 100%;
+  font-size: 36px;
+  font-weight: 700;
+  border: none;
+  outline: none;
+  color: black;
+}
+
+.currency-input span {
+  position: absolute;
+  bottom: 8px;
+  left: 15px;
+  font-size: 12px;
+  color: #c6c6c6;
+}
+
+.connection{
+  display: none;
+        background: #ffdddd;
+        color: #a10000;
+        text-align: center;
+        padding: 10px;
+        font-weight: bold;
+        width: 100%;
+}
+
+@media (max-width: 1192px) {
+  .logo {
+    margin-left: 0;
+  }
+
+  header {
+    flex-wrap: nowrap;
+  }
+}
+
+@media (max-width: 1097px) {
+  .login {
+    margin-left: 0;
+  }
+}
+
+@media (max-width: 1024px) {
+  .converter {
+    gap: 40px;
+  }
+
+  h1 {
+    font-size: 32px;
+  }
+
+  nav {
+    gap: 30px;
+  }
+}
+
+@media (max-width: 992px) {
+  header {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 15px 20px;
+  }
+
+  .logo {
+    margin-bottom: 10px;
+  }
+
+  .burger-icon {
+    display: block;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+  }
+
+  nav {
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+    gap: 10px;
+    margin-left: 0;
+    display: none;
+  }
+
+  header.active nav {
+    display: flex;
+  }
+
+  .login {
+    margin: 10px 0 0 0;
+  }
+
+  .converter {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  h1 {
+    font-size: 28px;
+  }
+
+  .left-convertor,
+  .right-convertor {
+    width: 100%;
+    max-width: 320px;
+  }
+}
+
+@media (max-width: 480px) {
+  h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+
+  .currency-input input {
+    font-size: 28px;
+  }
+
+  .currency-input span {
+    font-size: 10px;
+  }
+
+  .logo {
+    max-width: 100px;
+  }
+
+  nav {
+    gap: 8px;
+  }
+
+  .login {
+    font-size: 14px;
+    padding: 6px 12px;
+  }
+}
