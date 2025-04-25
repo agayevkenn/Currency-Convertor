@@ -95,7 +95,7 @@ async function currencyConverter(fromLeft = true) {
 
   let amount = Number(fromInput.value);
 
-  let access_key = "9f1fba1ce913c065afc993dc4c83018c";
+  let access_key = "ce457f7e679d8ded04f19c11"; // Sənin yeni API açarın
 
   if (from == to) {
     toInput.value = fromInput.value;
@@ -109,14 +109,12 @@ async function currencyConverter(fromLeft = true) {
 
   if (!fromInput.value || isNaN(amount) || amount == 0) {
     fetch(
-      `https://api.currencylayer.com/live?access_key=${access_key}&source=${from}&currencies=${to}`
+      `https://v6.exchangerate-api.com/v6/${access_key}/latest/${from}`
     )
       .then((res) => res.json())
       .then((data) => {
-        let rateKey = `${from}${to}`;
-        let rate = data.quotes[rateKey];
-
-        if (data.success && rate) {
+        if (data.result === "success" && data.conversion_rates[to]) {
+          let rate = data.conversion_rates[to];
           let spans = document.querySelectorAll(".currency-input span");
           spans[0].textContent = `1 ${leftCurrency} = ${rate.toFixed(
             4
@@ -140,14 +138,12 @@ async function currencyConverter(fromLeft = true) {
   }
 
   fetch(
-    `https://api.currencylayer.com/live?access_key=${access_key}&source=${from}&currencies=${to}`
+    `https://v6.exchangerate-api.com/v6/${access_key}/latest/${from}`
   )
     .then((res) => res.json())
     .then((data) => {
-      let rateKey = `${from}${to}`;
-      let rate = data.quotes[rateKey];
-
-      if (data.success && rate) {
+      if (data.result === "success" && data.conversion_rates[to]) {
+        let rate = data.conversion_rates[to];
         let result = (amount * rate).toFixed(5);
         toInput.value = result;
 
@@ -169,7 +165,7 @@ async function currencyConverter(fromLeft = true) {
           )} ${rightCurrency}`;
         }
       } else {
-        console.error("API error:", data.error);
+        console.error("API error:", data['error-type']);
         toInput.value = "";
       }
     })
@@ -178,6 +174,106 @@ async function currencyConverter(fromLeft = true) {
       toInput.value = "";
     });
 }
+async function currencyConverter(fromLeft = true) {
+  let fromInput, toInput;
+  let from, to;
+
+  if (fromLeft) {
+    fromInput = leftInput;
+    toInput = rightInput;
+
+    from = leftCurrency;
+    to = rightCurrency;
+  } else {
+    fromInput = rightInput;
+    toInput = leftInput;
+
+    from = rightCurrency;
+    to = leftCurrency;
+  }
+
+  let amount = Number(fromInput.value);
+
+  let access_key = "ce457f7e679d8ded04f19c11"; // Sənin yeni API açarın
+
+  if (from == to) {
+    toInput.value = fromInput.value;
+
+    let spans = document.querySelectorAll(".currency-input span");
+    spans[0].textContent = `1 ${from} = 1 ${from}`;
+    spans[1].textContent = `1 ${from} = 1 ${from}`;
+
+    return;
+  }
+
+  if (!fromInput.value || isNaN(amount) || amount == 0) {
+    fetch(
+      `https://v6.exchangerate-api.com/v6/${access_key}/latest/${from}`
+    )
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.result === "success" && data.conversion_rates[to]) {
+          let rate = data.conversion_rates[to];
+          let spans = document.querySelectorAll(".currency-input span");
+          spans[0].textContent = `1 ${leftCurrency} = ${rate.toFixed(
+            4
+          )} ${rightCurrency}`;
+          spans[1].textContent = `1 ${rightCurrency} = ${(1 / rate).toFixed(
+            4
+          )} ${leftCurrency}`;
+        }
+      })
+      .catch((error) => {
+        console.error("Rate fetch error:", error);
+      });
+
+    toInput.value = "";
+    return;
+  }
+
+  if (!isOnline) {
+    toInput.value = "";
+    return;
+  }
+
+  fetch(
+    `https://v6.exchangerate-api.com/v6/${access_key}/latest/${from}`
+  )
+    .then((res) => res.json())
+    .then((data) => {
+      if (data.result === "success" && data.conversion_rates[to]) {
+        let rate = data.conversion_rates[to];
+        let result = (amount * rate).toFixed(5);
+        toInput.value = result;
+
+        let spans = document.querySelectorAll(".currency-input span");
+
+        if (fromLeft) {
+          spans[0].textContent = `1 ${leftCurrency} = ${rate.toFixed(
+            4
+          )} ${rightCurrency}`;
+          spans[1].textContent = `1 ${rightCurrency} = ${(1 / rate).toFixed(
+            4
+          )} ${leftCurrency}`;
+        } else {
+          spans[1].textContent = `1 ${rightCurrency} = ${rate.toFixed(
+            4
+          )} ${leftCurrency}`;
+          spans[0].textContent = `1 ${leftCurrency} = ${(1 / rate).toFixed(
+            4
+          )} ${rightCurrency}`;
+        }
+      } else {
+        console.error("API error:", data['error-type']);
+        toInput.value = "";
+      }
+    })
+    .catch((error) => {
+      console.error("Conversion error:", error);
+      toInput.value = "";
+    });
+}
+
 
 let isOnline = navigator.onLine;
 let connection = document.querySelector(".connection");
