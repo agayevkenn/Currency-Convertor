@@ -23,37 +23,48 @@ document.querySelectorAll(".currency-button").forEach((item, index) => {
   });
 });
 
+let commaTimer;
+
 [leftInput, rightInput].forEach((input, index) => {
   input.addEventListener("input", () => {
+    clearTimeout(commaTimer);
     let value = input.value;
 
     if (value.includes(",")) {
-      value = value.replace(/,/g, ".");
-      input.value = value;
+      commaTimer = setTimeout(() => {
+        value = value.replace(/,/g, ".");
+        input.value = value;
+
+        processInputValue();
+      }, 500);
+    } else {
+      processInputValue();
     }
 
-    value = value.replace(/[^0-9.]/g, "");
-    let firstDot = value.indexOf(".");
+    function processInputValue() {
+      value = input.value.replace(/[^0-9.]/g, "");
+      let firstDot = value.indexOf(".");
 
-    if (firstDot !== -1) {
-      let beforeDot = value.slice(0, firstDot + 1);
-      let afterDot = value.slice(firstDot + 1).replace(/\./g, "");
+      if (firstDot !== -1) {
+        let beforeDot = value.slice(0, firstDot + 1);
+        let afterDot = value.slice(firstDot + 1).replace(/\./g, "");
 
-      afterDot = afterDot.slice(0, 5);
+        afterDot = afterDot.slice(0, 5);
 
-      value = beforeDot + afterDot;
+        value = beforeDot + afterDot;
 
-      if ((value.match(/\./g) || []).length > 1) {
-        value = value.slice(0, -1);
+        if ((value.match(/\./g) || []).length > 1) {
+          value = value.slice(0, -1);
+        }
       }
-    }
 
-    if (!value.startsWith("0.") && value.startsWith("0")) {
-      value = value.replace(/^0+(?=\d)/, "");
-    }
+      if (!value.startsWith("0.") && value.startsWith("0")) {
+        value = value.replace(/^0+(?=\d)/, "");
+      }
 
-    input.value = value;
-    currencyConverter(index == 0);
+      input.value = value;
+      currencyConverter(index == 0);
+    }
   });
 });
 
@@ -76,7 +87,32 @@ async function currencyConverter(fromLeft = true) {
   }
 
   let amount = Number(fromInput.value);
-  if (isNaN(amount)) {
+
+  let access_key = "cdeb12ce3901a324866d134a60b2e435";
+
+  if (!fromInput.value || isNaN(amount) || amount == 0) {
+    fetch(
+      `https://api.currencylayer.com/live?access_key=${access_key}&source=${from}&currencies=${to}`
+    )
+      .then((res) => res.json())
+      .then((data) => {
+        let rateKey = `${from}${to}`;
+        let rate = data.quotes[rateKey];
+
+        if (data.success && rate) {
+          let spans = document.querySelectorAll(".currency-input span");
+          spans[0].textContent = `1 ${leftCurrency} = ${rate.toFixed(
+            4
+          )} ${rightCurrency}`;
+          spans[1].textContent = `1 ${rightCurrency} = ${(1 / rate).toFixed(
+            4
+          )} ${leftCurrency}`;
+        }
+      })
+      .catch((error) => {
+        console.error("Rate fetch error:", error);
+      });
+
     toInput.value = "";
     return;
   }
@@ -96,8 +132,6 @@ async function currencyConverter(fromLeft = true) {
     return;
   }
 
-  let access_key = "c05a47c17e87a87d6f60dfc681363820";
-
   fetch(
     `https://api.currencylayer.com/live?access_key=${access_key}&source=${from}&currencies=${to}`
   )
@@ -107,7 +141,7 @@ async function currencyConverter(fromLeft = true) {
       let rate = data.quotes[rateKey];
 
       if (data.success && rate) {
-        let result = (amount * rate).toFixed(2);
+        let result = (amount * rate).toFixed(5);
         toInput.value = result;
 
         let spans = document.querySelectorAll(".currency-input span");
