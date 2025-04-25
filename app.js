@@ -24,6 +24,13 @@ document.querySelectorAll(".currency-button").forEach((item, index) => {
 });
 
 let commaTimer;
+[leftInput, rightInput].forEach((input) => {
+  input.addEventListener("keydown", (e) => {
+    if (e.key == "," && input.value.includes(",")) {
+      e.preventDefault(); 
+    }
+  });
+});
 
 [leftInput, rightInput].forEach((input, index) => {
   input.addEventListener("input", () => {
@@ -88,7 +95,17 @@ async function currencyConverter(fromLeft = true) {
 
   let amount = Number(fromInput.value);
 
-  let access_key = "cdeb12ce3901a324866d134a60b2e435";
+  let access_key = "9f1fba1ce913c065afc993dc4c83018c";
+
+  if (from == to) {
+    toInput.value = fromInput.value;
+
+    let spans = document.querySelectorAll(".currency-input span");
+    spans[0].textContent = `1 ${from} = 1 ${from}`;
+    spans[1].textContent = `1 ${from} = 1 ${from}`;
+
+    return;
+  }
 
   if (!fromInput.value || isNaN(amount) || amount == 0) {
     fetch(
@@ -114,16 +131,6 @@ async function currencyConverter(fromLeft = true) {
       });
 
     toInput.value = "";
-    return;
-  }
-
-  if (from == to) {
-    toInput.value = fromInput.value;
-
-    let spans = document.querySelectorAll(".currency-input span");
-    spans[0].textContent = `1 ${leftCurrency} = 1 ${rightCurrency}`;
-    spans[1].textContent = `1 ${rightCurrency} = 1 ${leftCurrency}`;
-
     return;
   }
 
